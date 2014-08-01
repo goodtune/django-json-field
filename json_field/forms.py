@@ -1,4 +1,4 @@
-    import json
+import json
 
 from django.forms import fields, util
 
@@ -7,7 +7,7 @@ from decimal import Decimal
 
 class JSONFormField(fields.Field):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, max_length=None, *args, **kwargs):
         from .fields import JSONEncoder, JSONDecoder
         self.evaluate = kwargs.pop('evaluate', False)
         self.encoder_kwargs = kwargs.pop('encoder_kwargs', {'cls':JSONEncoder})
