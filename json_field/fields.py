@@ -3,10 +3,7 @@ from __future__ import unicode_literals
 from json_field.utils import is_aware
 from json_field.forms import JSONFormField
 
-try:
-    import json
-except ImportError:  # python < 2.6
-    from django.utils import simplejson as json
+import json
 
 from django.db import models
 from django.core import exceptions
@@ -21,11 +18,6 @@ try:
     from dateutil import parser as date_parser
 except ImportError:
     raise ImproperlyConfigured('The "dateutil" library is required and was not found.')
-
-try:
-    JSON_DECODE_ERROR = json.JSONDecodeError # simplejson
-except AttributeError:
-    JSON_DECODE_ERROR = ValueError # other
 
 TIME_RE = re.compile(r'^\d{2}:\d{2}:\d{2}')
 DATE_RE = re.compile(r'^\d{4}-\d{2}-\d{2}(?!T)')
@@ -171,7 +163,7 @@ class JSONField(models.TextField):
         if isinstance(value, six.string_types):
             try:
                 value = json.loads(value, **self.decoder_kwargs)
-            except JSON_DECODE_ERROR:
+            except ValueError:
                 pass
         return value
 
